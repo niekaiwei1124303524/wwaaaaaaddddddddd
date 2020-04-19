@@ -1,6 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Git 代码回滚</title>
+    <url>/2017/02/16/2017-02-16-Git-%E4%BB%A3%E7%A0%81%E5%9B%9E%E6%BB%9A/</url>
+    <content><![CDATA[<blockquote>
+<p>并不适合阅读的个人文档。</p>
+</blockquote>
+<h1 id="git-revert-和-git-reset-的区别"><a href="#git-revert-和-git-reset-的区别" class="headerlink" title="git revert 和 git reset 的区别"></a><strong>git revert</strong> 和 <strong>git reset</strong> 的区别</h1><p> 先看图：</p>
+<p><img src="/" class="lazyload" data-src="https://ww3.sinaimg.cn/large/006tNbRwgy1fcr9tu6vdjj30t30ez0y8.jpg"  alt=""></p>
+<p><strong>sourceTree</strong> 中 <strong>revert</strong> 译为<strong><code>提交回滚</code></strong>，作用为忽略你指定的版本，然后提交一个新的版本。新的版本中已近删除了你所指定的版本。</p>
+<p><strong>reset</strong> 为 <strong>重置到这次提交</strong>，将内容重置到指定的版本。<code>git reset</code> 命令后面是需要加2种参数的：<code>–-hard</code> 和 <code>–-soft</code>。这条命令默认情况下是 <code>-–soft</code>。</p>
+<p>执行上述命令时，这该条commit号之 后（时间作为参考点）的所有commit的修改都会退回到git缓冲区中。使用<code>git status</code> 命令可以在缓冲区中看到这些修改。而如果加上<code>-–hard</code>参数，则缓冲区中不会存储这些修改，git会直接丢弃这部分内容。可以使用 <code>git push origin HEAD --force</code> 强制将分区内容推送到远程服务器。</p>
+<h4 id="代码回退"><a href="#代码回退" class="headerlink" title="代码回退"></a>代码回退</h4><p>默认参数 <code>-soft</code>,所有commit的修改都会退回到git缓冲区<br>参数<code>--hard</code>，所有commit的修改直接丢弃</p>
+<pre><code>$ git reset --hard HEAD^         回退到上个版本
+$ git reset --hard commit_id    退到/进到 指定commit_id</code></pre><p>推送到远程    </p>
+<pre><code>$ git push origin HEAD --force</code></pre><h4 id="可以吃的后悔药-gt-版本穿梭"><a href="#可以吃的后悔药-gt-版本穿梭" class="headerlink" title="可以吃的后悔药-&gt;版本穿梭"></a>可以吃的后悔药-&gt;版本穿梭</h4><p>当你回滚之后，又后悔了，想恢复到新的版本怎么办？</p>
+<p>用<code>git reflog</code>打印你记录你的每一次操作记录</p>
+<pre><code>$ git reflog
+
+输出：
+c7edbfe HEAD@{0}: reset: moving to c7edbfefab1bdbef6cb60d2a7bb97aa80f022687
+470e9c2 HEAD@{1}: reset: moving to 470e9c2
+b45959e HEAD@{2}: revert: Revert &quot;add img&quot;
+470e9c2 HEAD@{3}: reset: moving to 470e9c2
+2c26183 HEAD@{4}: reset: moving to 2c26183
+0f67bb7 HEAD@{5}: revert: Revert &quot;add img&quot;</code></pre><p>找到你操作的id如：<code>b45959e</code>，就可以回退到这个版本</p>
+<pre><code>$ git reset --hard b45959e</code></pre>]]></content>
+      <tags>
+        <tag>终端</tag>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>「体能训练理论」之动力链</title>
     <url>/2017/07/10/2017-07-10-(%E5%81%A5%E8%BA%AB)%E3%80%8C%E4%BD%93%E8%83%BD%E8%AE%AD%E7%BB%83%E7%90%86%E8%AE%BA%E3%80%8D%E4%B9%8B%E5%8A%A8%E5%8A%9B%E9%93%BE/</url>
     <content><![CDATA[<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>与其说体能训练是一种行为，不如说体能训练是一种程序。只要符合逻辑，就可以自由组合。<br> 那么体能训练的逻辑是什么？我们将之总结为：<a href="http://qiubaiying.top/2017/07/10/%E4%BD%93%E8%83%BD%E8%AE%AD%E7%BB%83%E7%90%86%E8%AE%BA-%E4%B9%8B%E5%8A%A8%E5%8A%9B%E9%93%BE/" target="_blank" rel="noopener"><strong>动力链</strong></a>、<a href="http://qiubaiying.top/2017/07/10/%E4%BD%93%E8%83%BD%E8%AE%AD%E7%BB%83%E7%90%86%E8%AE%BA-%E4%B9%8B%E5%8A%9F%E8%83%BD%E6%80%A7/" target="_blank" rel="noopener"><strong>功能性</strong></a>、<a href="http://qiubaiying.top/2017/07/10/%E4%BD%93%E8%83%BD%E8%AE%AD%E7%BB%83%E7%90%86%E8%AE%BA-%E4%B9%8B%E9%87%91%E5%AD%97%E5%A1%94/" target="_blank" rel="noopener"><strong>金字塔</strong></a>。</p>
@@ -315,37 +346,6 @@ $ git revert [commit]
 $ git stash
 $ git stash pop</code></pre><h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><pre><code># 生成一个可供发布的压缩包
 $ git archives</code></pre>]]></content>
-      <tags>
-        <tag>终端</tag>
-        <tag>Git</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Git 代码回滚</title>
-    <url>/2017/02/16/2017-02-16-Git-%E4%BB%A3%E7%A0%81%E5%9B%9E%E6%BB%9A/</url>
-    <content><![CDATA[<blockquote>
-<p>并不适合阅读的个人文档。</p>
-</blockquote>
-<h1 id="git-revert-和-git-reset-的区别"><a href="#git-revert-和-git-reset-的区别" class="headerlink" title="git revert 和 git reset 的区别"></a><strong>git revert</strong> 和 <strong>git reset</strong> 的区别</h1><p> 先看图：</p>
-<p><img src="/" class="lazyload" data-src="https://ww3.sinaimg.cn/large/006tNbRwgy1fcr9tu6vdjj30t30ez0y8.jpg"  alt=""></p>
-<p><strong>sourceTree</strong> 中 <strong>revert</strong> 译为<strong><code>提交回滚</code></strong>，作用为忽略你指定的版本，然后提交一个新的版本。新的版本中已近删除了你所指定的版本。</p>
-<p><strong>reset</strong> 为 <strong>重置到这次提交</strong>，将内容重置到指定的版本。<code>git reset</code> 命令后面是需要加2种参数的：<code>–-hard</code> 和 <code>–-soft</code>。这条命令默认情况下是 <code>-–soft</code>。</p>
-<p>执行上述命令时，这该条commit号之 后（时间作为参考点）的所有commit的修改都会退回到git缓冲区中。使用<code>git status</code> 命令可以在缓冲区中看到这些修改。而如果加上<code>-–hard</code>参数，则缓冲区中不会存储这些修改，git会直接丢弃这部分内容。可以使用 <code>git push origin HEAD --force</code> 强制将分区内容推送到远程服务器。</p>
-<h4 id="代码回退"><a href="#代码回退" class="headerlink" title="代码回退"></a>代码回退</h4><p>默认参数 <code>-soft</code>,所有commit的修改都会退回到git缓冲区<br>参数<code>--hard</code>，所有commit的修改直接丢弃</p>
-<pre><code>$ git reset --hard HEAD^         回退到上个版本
-$ git reset --hard commit_id    退到/进到 指定commit_id</code></pre><p>推送到远程    </p>
-<pre><code>$ git push origin HEAD --force</code></pre><h4 id="可以吃的后悔药-gt-版本穿梭"><a href="#可以吃的后悔药-gt-版本穿梭" class="headerlink" title="可以吃的后悔药-&gt;版本穿梭"></a>可以吃的后悔药-&gt;版本穿梭</h4><p>当你回滚之后，又后悔了，想恢复到新的版本怎么办？</p>
-<p>用<code>git reflog</code>打印你记录你的每一次操作记录</p>
-<pre><code>$ git reflog
-
-输出：
-c7edbfe HEAD@{0}: reset: moving to c7edbfefab1bdbef6cb60d2a7bb97aa80f022687
-470e9c2 HEAD@{1}: reset: moving to 470e9c2
-b45959e HEAD@{2}: revert: Revert &quot;add img&quot;
-470e9c2 HEAD@{3}: reset: moving to 470e9c2
-2c26183 HEAD@{4}: reset: moving to 2c26183
-0f67bb7 HEAD@{5}: revert: Revert &quot;add img&quot;</code></pre><p>找到你操作的id如：<code>b45959e</code>，就可以回退到这个版本</p>
-<pre><code>$ git reset --hard b45959e</code></pre>]]></content>
       <tags>
         <tag>终端</tag>
         <tag>Git</tag>
